@@ -180,7 +180,7 @@ def hello_world():
         opt.image_path = "./test/test"
         opt.batch_size = 1
         opt.saved_model = "./TPS-ResNet-BiLSTM-Attn-case-sensitive.pth"
-        opt.batch_max_length = 25
+        opt.batch_max_length = 10
         opt.imgH = 32
         opt.imgW = 100
         opt.character = '0123456789abcdefghijklmnopqrstuvwxyz'
