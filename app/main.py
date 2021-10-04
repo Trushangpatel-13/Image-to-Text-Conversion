@@ -14,6 +14,8 @@ from natsort import natsorted
 from PIL import Image
 from torch.utils.data import Dataset, ConcatDataset, Subset
 import torchvision.transforms as transforms
+import base64
+import io
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -148,7 +150,7 @@ def demo(opt,file):
                 dict['score'] = "{:.4f}".format(float(confidence_score))
 
                 # print(f'{pred:25s}\t{confidence_score:0.4f}')
-    return dict
+        return dict
 def allowed_file(filename):
     # xxx.png
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -157,19 +159,27 @@ def allowed_file(filename):
 @app.route('/ocr',methods=['POST'])
 def hello_world():
     if request.method == 'POST':
-        file = request.get_json()
-        print(file)
+        file = request.form.get('file')
+
+        """
         if file is None or file.filename == "":
             return jsonify({'error': 'no file'})
         if not allowed_file(file.filename):
             return jsonify({'error': 'format not supported'})
+        """
+        imgdata = base64.b64decode(file)
+        #imagePath = ('/content/drive/MyDrive/image Text Recognition/upload/test.png')
 
-        sys.setrecursionlimit(2000000)
+        img = Image.open(io.BytesIO(imgdata))
+        print(img)
+        img.save('./test.png', 'png')
+
+
         opt = Object()
         opt.image_path = "./test/test"
         opt.batch_size = 1
         opt.saved_model = "./TPS-ResNet-BiLSTM-Attn-case-sensitive.pth"
-        opt.batch_max_length = 1
+        opt.batch_max_length = 25
         opt.imgH = 32
         opt.imgW = 100
         opt.character = '0123456789abcdefghijklmnopqrstuvwxyz'
@@ -192,9 +202,11 @@ def hello_world():
 
             #img = Image.open(file).convert('L')
             #print(img)
+        file = './test.png'
         result = demo(opt,file)
         print(result)
-            #return jsonify({"Result":file.filename})
+
+        return jsonify({"Result":"1"})
         #except:
         #    return jsonify({'error': 'error during prediction'})
 
