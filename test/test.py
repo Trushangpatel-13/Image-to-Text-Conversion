@@ -9,5 +9,5 @@ with open(image_path, "rb") as img_file:
 print(my_string)
 data = {'file':my_string}
 #file = {'file':open('./test/2..png','rb')}
-res = requests.post('http://localhost:5000/ocr',data)
+res = requests.post('https://canvas-image-to-text.herokuapp.com/ocr',data)
 print(res.text)

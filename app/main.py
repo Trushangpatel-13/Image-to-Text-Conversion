@@ -160,7 +160,7 @@ def allowed_file(filename):
 def hello_world():
     if request.method == 'POST':
         file = request.form.get('file')
-
+        print(file)
         """
         if file is None or file.filename == "":
             return jsonify({'error': 'no file'})
@@ -173,6 +173,7 @@ def hello_world():
         img = Image.open(io.BytesIO(imgdata))
         print(img)
         img.save('./test.png', 'png')
+        print(img)
 
 
         opt = Object()
